@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	ros::Publisher readdata_pub = n.advertise<geometry_msgs::WrenchStamped>("rft_data", 1);
 	
 	// Setting of ROS rate [Hz]
-	ros::Rate loop_rate(333); 
+	ros::Rate loop_rate(1000.0); 
 
 	// Setup UART communication and sensor initialization
 	SerialPort USB;
@@ -33,6 +33,8 @@ int main(int argc, char **argv)
 	USB.setCOM(COMport);
 	
 	USB.setBAUD(B921600);
+	//USB.setBAUD(B115200);
+	//USB.setBAUD(B460800);
 
 
 	if ( USB.connect() != 0 ) {
@@ -46,13 +48,16 @@ int main(int argc, char **argv)
 	 
 	//Set BAUD RATE
 	//robotous_set_baud_rate(USB, robotous_packet, UART_BAUDRATE_921600);
+	//robotous_set_baud_rate(USB, robotous_packet, UART_BAUDRATE_460800);
 	
 	//Set output frequency
-   //robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_1000Hz);
+    //robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_1000Hz);
+	//robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_500Hz);
 	
 	
 	//Set LPF filter
 	//robotous_set_filter(USB, robotous_packet, 1, CUTOFF_20Hz);
+	robotous_set_filter(USB, robotous_packet, 1, CUTOFF_200Hz);
 	//robotous_set_filter(USB, robotous_packet, 0, CUTOFF_20Hz);
 
         sleep(1);
