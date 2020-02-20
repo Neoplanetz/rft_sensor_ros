@@ -3,6 +3,14 @@
 
 #include "robotous_sensor.h"  //it includes also serial_port.h and RFT_IF_PACKET_Rev1.0.h
 
+void set_serial_low_latency(const string& serial_port)
+{
+  cout << "Setting low_latency for " << serial_port << endl;
+  string command = "setserial " + serial_port + " low_latency";
+  int result = system(command.c_str());
+  cout << "Setting low_latency for " << serial_port << " result:" << result << endl;
+}
+
 // Main of the node
 int main(int argc, char **argv)
 {
@@ -16,7 +24,7 @@ int main(int argc, char **argv)
 	ros::Publisher readdata_pub = n.advertise<geometry_msgs::WrenchStamped>("rft_data", 1);
 	
 	// Setting of ROS rate [Hz]
-	ros::Rate loop_rate(1000.0); 
+	ros::Rate loop_rate(500.0); 
 
 	// Setup UART communication and sensor initialization
 	SerialPort USB;
@@ -52,12 +60,12 @@ int main(int argc, char **argv)
 	
 	//Set output frequency
     //robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_1000Hz);
-	//robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_500Hz);
+	robotous_set_output_rate(USB, robotous_packet, OUTPUT_FRQ_500Hz);
 	
 	
 	//Set LPF filter
-	//robotous_set_filter(USB, robotous_packet, 1, CUTOFF_20Hz);
-	robotous_set_filter(USB, robotous_packet, 1, CUTOFF_200Hz);
+	robotous_set_filter(USB, robotous_packet, 1, CUTOFF_20Hz);
+	//robotous_set_filter(USB, robotous_packet, 1, CUTOFF_200Hz);
 	//robotous_set_filter(USB, robotous_packet, 0, CUTOFF_20Hz);
 
         sleep(1);
@@ -78,6 +86,7 @@ sleep(1);
 	// Sensor unbiasing
 	robotous_set_bias(USB, robotous_packet, 1);
 sleep(1);
+set_serial_low_latency(COMport);
 	if( robotous_read_force_once(USB, robotous_packet) ) {
 			cout << "\033[1;37mFirst received Force/Torque sample:\033[0m\r\n\033[1;37mfx:\033[0m " 
 		   << robotous_packet.m_rcvdForce[0] << "\r\n\033[1;37mfy:\033[0m " 
@@ -102,7 +111,8 @@ sleep(1);
 				ft_msg.wrench.torque.x = robotous_packet.m_rcvdForce[3];
 				ft_msg.wrench.torque.y = robotous_packet.m_rcvdForce[4];
 				ft_msg.wrench.torque.z = robotous_packet.m_rcvdForce[5];
-      	ft_msg.header.stamp = ros::Time::now();
+      			ft_msg.header.stamp = ros::Time::now();
+				ft_msg.header.frame_id = "rft_sensor";
 
                 bitset<6> overload(robotous_packet.m_rcvdForceStatus);
 
