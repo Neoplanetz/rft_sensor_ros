@@ -1,0 +1,11 @@
+<launch>
+  <!-- Parameters -->
+  <arg name="usb_name" default="/dev/ttyUSB0"/>
+  <arg name="baud" default="115200"/>
+
+  <node pkg="robotous_ft_sensor" type="read_rftdata" respawn="false" name="robotous_ft_sensor" output="screen">
+    <param name="ttyUSB" value="$(arg usb_name)"/>
+    <param name="baud_speed" value="$(arg baud)"/>
+  </node>
+
+  </launch>

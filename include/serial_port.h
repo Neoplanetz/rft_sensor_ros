@@ -13,7 +13,7 @@ using namespace std;
 
 class SerialPort {
 	public:
-		char* COMport;    // Number of COM port
+		const char* COMport;    // Number of COM port
 		speed_t baudrate;  // Port baud rate
 		int portDescr;     // Port descriptor
 
@@ -22,7 +22,7 @@ class SerialPort {
 		SerialPort(char* port, speed_t baud);
 		~SerialPort();
 
-		void setCOM(char* port);
+		void setCOM(const char* port);
 		void setBAUD(speed_t baud);
 		int connect();
 		int disconnect();

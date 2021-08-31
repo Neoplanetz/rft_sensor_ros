@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>rft_sensor</name>
+  <name>robotous_ft_sensor</name>
   <version>0.0.0</version>
   <description>The rft_sensor package</description>
   <maintainer email="andrea@todo.todo">andrea</maintainer>

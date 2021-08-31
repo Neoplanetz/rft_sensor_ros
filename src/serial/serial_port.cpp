@@ -6,12 +6,12 @@ SerialPort::SerialPort() { }
 
 SerialPort::~SerialPort() { }
 
-SerialPort::SerialPort(char* port, speed_t baud) { 
+SerialPort::SerialPort(char* port, speed_t baud) {
 	COMport = port;
 	baudrate = baud;
 }
 
-void SerialPort::setCOM(char* port) {
+void SerialPort::setCOM(const char* port) {
 	COMport = port;
 }
 
@@ -32,7 +32,7 @@ int SerialPort::connect() {
 	}
 	else {
 		fcntl(fd, F_SETFL, 0);
-		tcgetattr(fd, &options);	
+		tcgetattr(fd, &options);
 
 		/* Set Baud Rate */
 		cfsetospeed (&options, baudrate);
@@ -63,7 +63,7 @@ int SerialPort::connect() {
 
 		portDescr = fd;
 		cout << "\033[1;31mSerial connection estabilished.\033[0m\r\n";
-			
+
 		return 0;
 	}
 }
