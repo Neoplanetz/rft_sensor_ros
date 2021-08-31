@@ -38,10 +38,11 @@ min = 1; time = 0;
 -echoke
 ```
 
-# 3. Set User Permission
+# 3. Set User Permission and Reboot
 ```bash
 $ sudo usermod -a -G dialout $USER
 $ sudo usermod -a -G tty $USER
+$ reboot
 ```
 
 # 4. Install SetSerial
